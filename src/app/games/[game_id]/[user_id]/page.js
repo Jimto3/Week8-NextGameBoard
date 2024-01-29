@@ -40,7 +40,7 @@ export default async function CreatePost({ params }) {
                     "message"
                 )}, 0)`;
                 revalidatePath(`/games/${params.game_id}`);
-                redirect("/games/${params.game_id}");
+                redirect(`/games/${params.game_id}`);
             }
         } else {
             console.log("Not logged in!");
