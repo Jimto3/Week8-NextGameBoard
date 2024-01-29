@@ -2,6 +2,8 @@ import { sql } from "@vercel/postgres";
 import Link from "next/link";
 import Image from "next/image";
 import like from "@/../public/like.png";
+import { redirect } from "next/navigation";
+import CreateMessage from "@/app/components/CreateMessage";
 
 export default async function GamePage({ params }) {
     const { rows } =
@@ -9,6 +11,7 @@ export default async function GamePage({ params }) {
     JOIN genres ON games.genre_id = genres.id
     JOIN comments ON games.id = comments.game_id
     WHERE games.id=${params.game_id}`;
+
     return (
         <div className="flex justify-center items-center font-mono flex-col gap-4">
             <div className="flex items-center justify-center mt-[20px] text-4xl font-mono bg-white w-[100%] border-2 border-black">
@@ -26,6 +29,15 @@ export default async function GamePage({ params }) {
                         key={game.id}
                         className="border-2 border-black rounded bg-white text-black font-mono w-[60vw] text-center "
                     >
+                        <button
+                            className="flex flex-row justify-start w-[60vw] absolute hover:cursor-pointer"
+                            onClick={async () => {
+                                "use server";
+                                handleDelete(game.id);
+                            }}
+                        >
+                            Delete
+                        </button>
                         <div className="bg-teal-300">
                             <h2 className="flex flex-row justify-end w-[60vw] absolute">
                                 {game.likes}
@@ -41,6 +53,13 @@ export default async function GamePage({ params }) {
                     </div>
                 );
             })}
+            {<CreateMessage game_id={params.game_id} />}
         </div>
     );
+
+    async function handleDelete(comment_id) {
+        // "use server";
+        await sql`DELETE FROM comments WHERE id=${comment_id}`;
+        console.log("done");
+    }
 }

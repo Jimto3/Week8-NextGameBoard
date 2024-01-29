@@ -9,7 +9,6 @@ export default function Home() {
             console.log(localStorage.getItem("id"));
         } else console.log("is local storage");
         redirect("/games");
-        return;
     }, []);
     // redirect("/games");
     // return <div className="flex justify-center">{<Games />}</div>;
